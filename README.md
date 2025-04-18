@@ -6,4 +6,4 @@ Artisyn is a decentralized protocol on Starknet connecting local artisans with u
 
 ## Contribution Guide
 
-To contribute to this project, create a fork, create something awesome and open a pull request.
+To contribute to this project, check out the available issues, find one you can resolve, make something awesome and open a pull request.
