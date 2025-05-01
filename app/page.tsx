@@ -1,9 +1,11 @@
-import React from 'react';
+import Hero from '@/components/landing/sections/hero';
+import HowItWorks from '@/components/landing/sections/how-it-works';
 
 function Page() {
   return (
     <div>
-      welcome
+      <Hero />
+      <HowItWorks />
     </div>
   )
 };

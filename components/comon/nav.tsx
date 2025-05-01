@@ -1,3 +1,4 @@
+'use client'
 import Logo from '@/components/comon/logo';
 import MaxWidthWrap from '@/components/comon/max-width-wrap';
 import { Button } from '@/components/ui/button';
@@ -27,7 +28,7 @@ function Nav() {
 
         <div
           className={`flex gap-6 md:gap-2 items-center
-          max-md:flex-col max-md:p-6 max-md:items-start
+          max-md:flex-col max-md:p-6 max-md:items-start max-md:w-2/3
           ${showMobileNav ? 'max-md:translate-x-0' : 'max-md:translate-x-full pointer-events-none'}
           transition-transform max-md:duration-300 ease-in-out
           max-md:fixed max-md:inset-y-0 max-md:right-0 max-md:bg-black/90 z-10`}>
