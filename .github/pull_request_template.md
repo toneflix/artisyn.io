@@ -1,4 +1,4 @@
-# 🚀 StarShop Pull Request
+# 🚀 Artisyn.io Pull Request
 
 Mark with an `x` all the checkboxes that apply (like `[x]`)
 

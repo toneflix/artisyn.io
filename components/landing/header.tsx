@@ -1,8 +1,10 @@
-import React from 'react';
+import Nav from '@/components/comon/nav';
 
 function Header() {
   return (
-    <div>Header</div>
+    <header className='p-4 absolute inset-x-0'>
+      <Nav />
+    </header>
   )
 };
 
