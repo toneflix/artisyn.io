@@ -1,4 +1,4 @@
-export default {
+const Svgs = {
   chisel: ({ className }: { className?: string }) => (
     <svg className={className} viewBox="0 0 88 88" fill="none" xmlns="http://www.w3.org/2000/svg">
     <g clipPath="url(#clip0_7_205)">
@@ -47,3 +47,5 @@ export default {
 
   )
 };
+
+export default Svgs;
