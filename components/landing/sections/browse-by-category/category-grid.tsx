@@ -1,5 +1,3 @@
-"use client";
-
 import { CategoryCard } from "./category-card";
 import { NotFoundState } from "./not-found-state";
 import type { Category } from "@/lib/browse-by-categories-types";

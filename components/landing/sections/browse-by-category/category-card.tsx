@@ -1,5 +1,3 @@
-"use client";
-
 import { Card, CardContent } from "@/components/ui/card";
 import type { Category, IconType } from "@/lib/browse-by-categories-types";
 import {
