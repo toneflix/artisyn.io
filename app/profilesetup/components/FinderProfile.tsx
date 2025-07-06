@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { ArrowLeft, Camera, User } from "lucide-react";
+import Image from 'next/image'
 
 export default function FinderProfile({ onBack }: { onBack: () => void }) {
   const [profileImage, setProfileImage] = useState<string | null>(null);
@@ -40,7 +41,7 @@ export default function FinderProfile({ onBack }: { onBack: () => void }) {
           <div className="relative">
             <div className="w-24 h-24 rounded-full bg-gray-100 border-2 border-gray-200 flex items-center justify-center overflow-hidden">
               {profileImage ? (
-                <img
+                <Image
                   src={profileImage}
                   alt="Profile preview"
                   className="w-full h-full object-cover"
