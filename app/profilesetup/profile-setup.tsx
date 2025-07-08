@@ -3,6 +3,9 @@ import React, { useState } from "react";
 import { Wrench, Search } from "lucide-react";
 import CuratorProfile from "./components/CuratorProfile";
 import FinderProfile from "./components/FinderProfile";
+import { useRouter } from "next/navigation";
+import { useAppContext } from "../../components/comon/AppContext";
+import { useAccount } from "wagmi";
 
 const accountTypes = [
   {
@@ -18,11 +21,42 @@ const accountTypes = [
 ];
 
 export default function ProfileSetup() {
+  const router = useRouter();
+  const { setAccountType, accountType, setWalletConnected } = useAppContext();
+  const { isConnected } = useAccount();
   const [selected, setSelected] = useState<string | null>(null);
   const [showProfile, setShowProfile] = useState(false);
 
+  // Handler to clear account type and wallet connection
+  const handleReset = () => {
+    setAccountType(null);
+    setWalletConnected(false);
+    router.replace("/profilesetup");
+  };
+
+  // Show the correct form if accountType is set and wallet is connected
+  if (isConnected && accountType) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-white p-4 sm:p-6 lg:p-8">
+        <div className="w-full max-w-md mx-auto">
+          <button
+            onClick={handleReset}
+            className="mb-6 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition"
+          >
+            Change Account Type / Disconnect
+          </button>
+          {accountType === "curator" && <CuratorProfile onBack={() => {}} />}
+          {accountType === "finder" && <FinderProfile onBack={() => {}} />}
+        </div>
+      </div>
+    );
+  }
+
   const handleContinue = () => {
-    if (selected) setShowProfile(true);
+    if (selected) {
+      setAccountType(selected);
+      router.push("/wallet-connect");
+    }
   };
 
   const handleBack = () => {
