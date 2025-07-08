@@ -1,5 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useRouter } from "next/navigation";
 import { useAccount, useDisconnect } from "wagmi";
 import { useAppContext } from "../../components/comon/AppContext";
@@ -7,11 +7,10 @@ import { useWeb3Modal } from "@web3modal/wagmi/react";
 
 export default function WalletConnect() {
   const router = useRouter();
-  const { accountType, setWalletConnected } = useAppContext();
+  const { setWalletConnected } = useAppContext();
   const { isConnected } = useAccount();
   const { disconnect } = useDisconnect();
   const { open } = useWeb3Modal();
-  const [status, setStatus] = useState<"idle" | "success">("idle");
 
   const handleContinue = () => {
     setWalletConnected(true);
