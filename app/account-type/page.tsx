@@ -1,27 +1,51 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { useRole } from "@/app/context/role-context";
+import { useRole, Role } from "@/app/context/role-context";
+import { withAuthOnly } from "@/components/auth/withAuth";
 
-export default function AccountType() {
+function AccountType() {
   const [selectedAccount, setSelectedAccount] = useState<string | null>(null);
   const router = useRouter();
-  const { setUserRole } = useRole();
+  const { setUserRole, isWalletConnected, isRoleSelected, isLoading } =
+    useRole();
+
+  useEffect(() => {
+    if (isLoading) {
+      return; // Don't run redirects until context is fully loaded
+    }
+
+    if (!isWalletConnected) {
+      router.replace("/connect-wallet");
+      return;
+    }
+    if (isRoleSelected) {
+      router.replace("/profile-setup");
+    }
+  }, [isLoading, isWalletConnected, isRoleSelected, router]);
 
   const handleAccountSelect = (accountType: string) => {
     setSelectedAccount(accountType);
   };
 
   const handleContinue = () => {
-    if (selectedAccount === "curator") {
-      setUserRole("curator");
-      router.push("/connect-wallet");
-    } else if (selectedAccount === "finder") {
-      setUserRole("finder");
-      router.push("/connect-wallet");
+    if (selectedAccount) {
+      setUserRole(selectedAccount as Role);
+      router.replace("/profile-setup");
     }
   };
+
+  if (isLoading || !isWalletConnected || isRoleSelected) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-2 text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-white flex items-center justify-center p-4">
@@ -139,3 +163,5 @@ export default function AccountType() {
     </div>
   );
 }
+
+export default withAuthOnly(AccountType);

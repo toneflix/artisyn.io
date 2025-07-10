@@ -3,8 +3,9 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { useRole } from "@/app/context/role-context";
+import { withRoleAuth } from "@/components/auth/withAuth";
 
-export default function ProfileSetup() {
+function ProfileSetup() {
   const router = useRouter();
   const {
     userRole,
@@ -20,15 +21,31 @@ export default function ProfileSetup() {
     country: "",
   });
 
-  // Protect the page from unauthorized access
+  useEffect(() => {
+    if (isWalletConnected && isRoleSelected) {
+      window.history.pushState(null, "", "/");
+      window.history.pushState(null, "", "/profile-setup");
+    }
+  }, [isWalletConnected, isRoleSelected]);
+
+  useEffect(() => {
+    const handlePopState = () => {
+      router.replace("/");
+    };
+
+    window.addEventListener("popstate", handlePopState);
+
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, [router]);
+
   useEffect(() => {
     if (!isWalletConnected || !isRoleSelected) {
-      // If wallet is not connected, redirect to connect wallet
       if (!isWalletConnected) {
         router.push("/connect-wallet");
         return;
       }
-      // If role is not selected, redirect to account type
       if (!isRoleSelected) {
         router.push("/account-type");
         return;
@@ -36,14 +53,12 @@ export default function ProfileSetup() {
     }
   }, [isWalletConnected, isRoleSelected, router]);
 
-  // Try to load saved form data from localStorage
   useEffect(() => {
     const savedFormData = localStorage.getItem("profileFormData");
     if (savedFormData) {
       try {
         const parsedData = JSON.parse(savedFormData);
         setFormData(parsedData);
-        // If we have saved form data, the profile was started
         setHasStartedProfile(true);
       } catch (error) {
         console.error("Failed to parse saved form data:", error);
@@ -57,23 +72,18 @@ export default function ProfileSetup() {
       [e.target.name]: e.target.value,
     };
     setFormData(newFormData);
-    // Mark profile as started on first input
     setHasStartedProfile(true);
-    // Save form data as user types
     localStorage.setItem("profileFormData", JSON.stringify(newFormData));
   };
 
   const handleContinue = () => {
-    // Save profile data and mark as complete
     setIsProfileComplete(true);
     setHasStartedProfile(false);
-    // Clear saved form data since profile is complete
     localStorage.removeItem("profileFormData");
     localStorage.removeItem("profileStarted");
 
-    // Redirect based on role
     if (userRole === "curator") {
-      router.push("/dashboard");
+      router.push("/curator/dashboard");
     } else if (userRole === "finder") {
       router.push("/finder/dashboard");
     }
@@ -85,7 +95,6 @@ export default function ProfileSetup() {
     formData.email &&
     formData.country;
 
-  // Show loading state while checking authorization
   if (!isWalletConnected || !isRoleSelected) {
     return (
       <div className="min-h-screen bg-white flex items-center justify-center">
@@ -199,3 +208,5 @@ export default function ProfileSetup() {
     </div>
   );
 }
+
+export default withRoleAuth(ProfileSetup);

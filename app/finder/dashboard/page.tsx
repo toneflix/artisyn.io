@@ -1,20 +1,7 @@
 "use client";
+import { withFinderAuth } from "@/components/auth/withAuth";
 
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { useRole } from "@/app/context/role-context";
-
-export default function FinderDashboard() {
-  const { isProfileComplete } = useRole();
-  const router = useRouter();
-
-  // Redirect incomplete profiles directly to profile setup
-  useEffect(() => {
-    if (!isProfileComplete) {
-      router.replace("/profile-setup");
-    }
-  }, [isProfileComplete, router]);
-
+function FinderDashboard() {
   return (
     <div className="p-6">
       <div className="mb-8">
@@ -120,3 +107,5 @@ export default function FinderDashboard() {
     </div>
   );
 }
+
+export default withFinderAuth(FinderDashboard);

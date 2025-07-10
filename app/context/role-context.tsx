@@ -2,15 +2,17 @@
 
 import { createContext, useContext, useState, useEffect } from "react";
 
-type Role = "curator" | "finder" | null;
+export type Role = "curator" | "finder" | null;
 
 interface RoleContextType {
   userRole: Role;
   isRoleSelected: boolean;
   isProfileComplete: boolean;
   isWalletConnected: boolean;
+  isAuthenticated: boolean; // Add this
   hasStartedProfile: boolean;
   walletAddress: string | null;
+  isLoading: boolean;
   setUserRole: (role: Role) => void;
   setIsProfileComplete: (complete: boolean) => void;
   setHasStartedProfile: (started: boolean) => void;
@@ -26,6 +28,7 @@ export function RoleProvider({ children }: { children: React.ReactNode }) {
   const [isWalletConnected, setIsWalletConnected] = useState(false);
   const [hasStartedProfile, setHasStartedProfile] = useState(false);
   const [walletAddress, setWalletAddress] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     // Load saved state from localStorage
@@ -43,6 +46,8 @@ export function RoleProvider({ children }: { children: React.ReactNode }) {
       setIsWalletConnected(true);
     }
     if (savedProfileStarted) setHasStartedProfile(true);
+
+    setIsLoading(false);
   }, []);
 
   const connectWallet = (address: string) => {
@@ -52,16 +57,22 @@ export function RoleProvider({ children }: { children: React.ReactNode }) {
   };
 
   const disconnectWallet = () => {
+    // Batch state updates to reduce re-renders
     setWalletAddress(null);
     setIsWalletConnected(false);
     setUserRole(null);
     setIsProfileComplete(false);
     setHasStartedProfile(false);
-    localStorage.removeItem("walletAddress");
-    localStorage.removeItem("userRole");
-    localStorage.removeItem("profileComplete");
-    localStorage.removeItem("profileStarted");
-    localStorage.removeItem("profileFormData");
+
+    // Batch localStorage operations
+    const keysToRemove = [
+      "walletAddress",
+      "userRole",
+      "profileComplete",
+      "profileStarted",
+      "profileFormData",
+    ];
+    keysToRemove.forEach((key) => localStorage.removeItem(key));
   };
 
   const handleSetUserRole = (role: Role) => {
@@ -90,8 +101,10 @@ export function RoleProvider({ children }: { children: React.ReactNode }) {
         isRoleSelected: userRole !== null,
         isProfileComplete,
         isWalletConnected,
+        isAuthenticated: isWalletConnected, // Base authentication is wallet connection
         hasStartedProfile,
         walletAddress,
+        isLoading,
         setUserRole: handleSetUserRole,
         setIsProfileComplete: handleSetIsProfileComplete,
         setHasStartedProfile: handleSetHasStartedProfile,

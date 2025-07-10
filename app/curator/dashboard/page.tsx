@@ -1,19 +1,7 @@
 "use client";
+import { withCuratorAuth } from "@/components/auth/withAuth";
 
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { useRole } from "@/app/context/role-context";
-
-export default function DashboardPage() {
-  const { isProfileComplete } = useRole();
-  const router = useRouter();
-
-  useEffect(() => {
-    if (!isProfileComplete) {
-      router.replace("/profile-setup");
-    }
-  }, [isProfileComplete, router]);
-
+function CuratorDashboardPage() {
   return (
     <div>
       <div className="flex flex-col gap-4">
@@ -21,7 +9,7 @@ export default function DashboardPage() {
           <h1 className="text-2xl font-bold">Dashboard</h1>
           <p className="text-gray-600">Welcome to your curator dashboard</p>
         </div>
-    
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           <div className="bg-white p-6 rounded-lg border border-gray-200">
             <h3 className="text-lg font-medium mb-2">Total Listings</h3>
@@ -45,3 +33,5 @@ export default function DashboardPage() {
     </div>
   );
 }
+
+export default withCuratorAuth(CuratorDashboardPage);

@@ -9,14 +9,30 @@ export default function ConnectWallet() {
   const [isConnecting, setIsConnecting] = useState(false);
   const [isClient, setIsClient] = useState(false);
   const router = useRouter();
-  const roleContext = useRole();
+  const { connectWallet, isWalletConnected, isRoleSelected, isLoading } =
+    useRole();
 
   useEffect(() => {
     setIsClient(true);
   }, []);
 
+  // Wait for context to load before running redirects
+  useEffect(() => {
+    if (!isClient || isLoading) {
+      return; // Don't run redirects until context is fully loaded
+    }
+
+    if (isWalletConnected) {
+      if (isRoleSelected) {
+        router.replace("/profile-setup");
+      } else {
+        router.replace("/account-type");
+      }
+    }
+  }, [isClient, isLoading, isWalletConnected, isRoleSelected, router]);
+
   const handleConnectWallet = async () => {
-    if (!roleContext?.connectWallet) {
+    if (!connectWallet) {
       console.error("Wallet connection not available");
       return;
     }
@@ -35,10 +51,10 @@ export default function ConnectWallet() {
         Math.random().toString(16).slice(2, 6);
 
       // Update context with connected wallet
-      roleContext.connectWallet(mockAddress);
+      connectWallet(mockAddress);
 
-      // Redirect to profile setup
-      router.push("/profile-setup");
+      // Redirect to account-type using replace
+      router.replace("/account-type");
     } catch (error) {
       console.error("Failed to connect wallet:", error);
     } finally {
@@ -46,9 +62,16 @@ export default function ConnectWallet() {
     }
   };
 
-  // Don't render until we're on the client
-  if (!isClient) {
-    return null;
+  // Show loading while context is hydrating or if redirecting
+  if (!isClient || isLoading || isWalletConnected) {
+    return (
+      <div className="min-h-screen bg-white flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto"></div>
+          <p className="mt-2 text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
   }
 
   return (
