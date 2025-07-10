@@ -1,4 +1,4 @@
-import SvgsIcons from "@/components/comon/svgs-icons";
+import SvgsIcons from "@/components/ui/icons/icon";
 
 const howItWorksSteps = [
   {
