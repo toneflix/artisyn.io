@@ -1,14 +1,23 @@
-"use client";
-import React from "react";
-import { withCuratorAuth } from "@/components/auth/withAuth";
+import { ArchivedListings } from "@/components/curator/archive/archived-listings";
 
-const Archive = () => {
+/**
+ * Curator Archive Page
+ * Displays all archived artisan listings with restore and delete actions
+ */
+export default function ArchivedListingsPage() {
   return (
-    <div>
-      <h1 className="text-2xl font-bold mb-4">Archive</h1>
-      <p className="text-gray-600">View archived artisan listings.</p>
+    <div className="min-h-screen bg-gray-50">
+      <div className="max-w-4xl mx-auto px-4 py-8">
+        {/* Page Header */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            Curator Archive
+          </h1>
+          <p className="text-gray-600">Manage your archive</p>
+        </div>
+
+        <ArchivedListings />
+      </div>
     </div>
   );
-};
-
-export default withCuratorAuth(Archive);
+}
