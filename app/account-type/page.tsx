@@ -4,6 +4,9 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { useRole, Role } from "@/app/context/role-context";
 import { withAuthOnly } from "@/components/auth/withAuth";
+import repair from "@/public/repair.svg";
+import finder from "@/public/search.svg";
+import Image from "next/image";
 
 function AccountType() {
   const [selectedAccount, setSelectedAccount] = useState<string | null>(null);
@@ -49,17 +52,17 @@ function AccountType() {
 
   return (
     <div className="min-h-screen bg-white flex items-center justify-center p-4">
-      <div className="max-w-md w-full">
+      <div className="max-w-md w-full border-2 border-[#E2E8F0] rounded-3xl p-6">
         <div className="text-center mb-8">
-          <h1 className="text-2xl font-semibold text-gray-900 mb-8">
+          <h1 className="text-2xl font-semibold text-[#020817] mb-16">
             Select Account Type
           </h1>
         </div>
 
-        <div className="grid grid-cols-2 gap-6 mb-8">
+        <div className="grid grid-cols-2 gap-6 mb-16">
           {/* Curator Option */}
           <div
-            className={`cursor-pointer text-center p-6 rounded-lg border-2 transition-all ${
+            className={`cursor-pointer text-center p-6 rounded-2xl border-[1.5px] transition-all ${
               selectedAccount === "curator"
                 ? "border-blue-500 bg-blue-50"
                 : "border-gray-200 hover:border-gray-300"
@@ -69,26 +72,12 @@ function AccountType() {
             <div className="mb-4">
               <div
                 className={`w-12 h-12 mx-auto rounded-full flex items-center justify-center ${
-                  selectedAccount === "curator" ? "bg-blue-500" : "bg-gray-200"
+                  selectedAccount === "curator"
+                    ? "bg-[#F0FDF4]"
+                    : "bg-[#F8FAFC]"
                 }`}
               >
-                <svg
-                  className={`w-6 h-6 ${
-                    selectedAccount === "curator"
-                      ? "text-white"
-                      : "text-gray-500"
-                  }`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
-                  />
-                </svg>
+                <Image src={repair} alt="repair" width={24} height={24} />
               </div>
             </div>
             <h3
@@ -104,7 +93,7 @@ function AccountType() {
 
           {/* Finder Option */}
           <div
-            className={`cursor-pointer text-center p-6 rounded-lg border-2 transition-all ${
+            className={`cursor-pointer text-center p-6 rounded-2xl border-[1.5px] transition-all ${
               selectedAccount === "finder"
                 ? "border-blue-500 bg-blue-50"
                 : "border-gray-200 hover:border-gray-300"
@@ -114,26 +103,10 @@ function AccountType() {
             <div className="mb-4">
               <div
                 className={`w-12 h-12 mx-auto rounded-full flex items-center justify-center ${
-                  selectedAccount === "finder" ? "bg-blue-500" : "bg-gray-200"
+                  selectedAccount === "finder" ? "bg-[#F0FDF4]" : "bg-[#F8FAFC]"
                 }`}
               >
-                <svg
-                  className={`w-6 h-6 ${
-                    selectedAccount === "finder"
-                      ? "text-white"
-                      : "text-gray-500"
-                  }`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                  />
-                </svg>
+                <Image src={finder} alt="finder" width={24} height={24} />
               </div>
             </div>
             <h3
@@ -150,9 +123,9 @@ function AccountType() {
           <Button
             onClick={handleContinue}
             disabled={!selectedAccount}
-            className={`w-full py-3 px-6 rounded-full font-medium text-white transition-all ${
+            className={`w-full py-6 px-6 mt-2 cursor-pointer rounded-full font-medium text-[#F8FAFC] transition-all ${
               selectedAccount
-                ? "bg-blue-600 hover:bg-blue-700"
+                ? "bg-[#2563EB] hover:bg-blue-700"
                 : "bg-gray-300 cursor-not-allowed"
             }`}
           >
